@@ -1,26 +1,59 @@
 Задача 1
-#Вместо этой строки сюда писать запрос - ответ на задачу 1
+SELECT orderNumber, productCode, SUM(quantityOrdered * priceEach) AS total_cost
+FROM orderdetails
+GROUP BY orderNumber, productCode
+ORDER BY total_cost DESC
+LIMIT 10;
 
 
 Задача 2
-#Вместо этой строки сюда писать запрос - ответ на задачу 2
+SELECT orderNumber, SUM(quantityOrdered * priceEach) AS total
+FROM orders
+GROUP BY orderNumber
+HAVING total > 59000
+ORDER BY total DESC;
 
 
 Задача 3
-#Вместо этой строки сюда писать запрос - ответ на задачу 3
+SELECT o.orderNumber, o.orderDate, o.status, SUM(od.quantityOrdered * od.priceEach) AS total
+FROM orders o
+INNER JOIN orderdetails od ON o.orderNumber = od.orderNumber
+GROUP BY o.orderNumber, o.orderDate, o.status
+HAVING total > 59000
+ORDER BY total DESC;
 
 
 Задача 4
-#Вместо этой строки сюда писать запрос - ответ на задачу 4
+SELECT c.contactFirstName, c.contactLastName, c.country, o.orderNumber, o.orderDate, o.status, SUM(od.quantityOrdered * od.priceEach) AS total
+FROM customers c
+INNER JOIN orders o ON c.customerNumber = o.customerNumber
+INNER JOIN orderdetails od ON o.orderNumber = od.orderNumber
+GROUP BY c.contactFirstName, c.contactLastName, c.country, o.orderNumber, o.orderDate, o.status
+HAVING total > 59000
+ORDER BY total DESC;
 
 
 Задача 5
-#Вместо этой строки сюда писать запрос - ответ на задачу 5
-
+SELECT pd.productName, SUM(quantityOrdered * priceEach) AS total_cost
+FROM orderdetails od
+inner join products pd on pd.productCode = od.productCode
+GROUP BY pd.productName
+ORDER BY total_cost DESC
+LIMIT 10;
 
 Задача 6
-#Вместо этой строки сюда писать запрос - ответ на задачу 6
+SELECT firstName, lastName, contactFirstName, contactLastName 
+FROM employees LEFT JOIN customers 
+    ON customers.salesRepEmployeeNumber = employees.employeeNumber
 
+UNION ALL
+
+SELECT firstName, lastName, contactFirstName, contactLastName 
+FROM employees RIGHT JOIN customers
+    ON customers.salesRepEmployeeNumber = employees.employeeNumber
+WHERE employees.employeeNumber IS NULL
 
 Задача 7
-#Вместо этой строки сюда писать запрос - ответ на задачу 7
+select a.firstName, a.lastName, a.jobTitle, b.firstName subFirstName, b.lastName subLastName
+FROM employees A LEFT JOIN employees B
+    ON A.employeeNumber = B.repostsTo
